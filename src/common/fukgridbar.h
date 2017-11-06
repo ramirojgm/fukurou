@@ -31,6 +31,8 @@ struct _FukGridBarClass
 struct _FukGridBar
 {
   GtkToolbar parent_instance;
+
+  FukGridBarPrivate * priv;
 };
 
 GType	fuk_grid_bar_get_type(void);
