@@ -15,21 +15,32 @@
 	along with the this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FUKPAGE_H_
-#define FUKPAGE_H_
 
-typedef struct _FukPagePrivate FukPagePrivate;
+#include "../fukurou.h"
 
-#define FUK_TYPE_PAGE	(fuk_page_get_type())
-G_DECLARE_DERIVABLE_TYPE(FukPage,fuk_page,FUK,PAGE,GtkBin)
+typedef struct _FukGridColumnPrivate FukGridColumnPrivate;
 
-struct _FukPageClass
+struct _FukGridColumnPrivate
 {
-  GtkBinClass parent_class;
-  gboolean (*closing)(FukPage * page);
+  FukGridSummaryType summary_type;
+  guint    data_index;
+  gboolean editable;
+
 };
 
+G_DEFINE_ABSTRACT_TYPE(FukGridColumn,fuk_grid_column,GTK_TYPE_TREE_VIEW_COLUMN)
 
-GType		fuk_page_get_type(void);
+static void
+fuk_grid_column_init(FukGridColumn * self)
+{
+  FukGridColumnPrivate * priv = fuk_grid_column_get_instance_private(
+      self);
 
-#endif /* FUKPAGE_H_ */
+  priv->summary_type = FUK_GRID_SUMMARY_NONE;
+}
+
+static void
+fuk_grid_column_class_init(FukGridColumnClass * self)
+{
+
+}

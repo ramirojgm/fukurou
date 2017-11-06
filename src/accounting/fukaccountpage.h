@@ -15,21 +15,26 @@
 	along with the this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FUKPAGE_H_
-#define FUKPAGE_H_
+#ifndef FUKACCOUNTPAGE_H_
+#define FUKACCOUNTPAGE_H_
 
-typedef struct _FukPagePrivate FukPagePrivate;
+typedef struct _FukAccountPagePrivate FukAccountPagePrivate;
 
-#define FUK_TYPE_PAGE	(fuk_page_get_type())
-G_DECLARE_DERIVABLE_TYPE(FukPage,fuk_page,FUK,PAGE,GtkBin)
+#define FUK_TYPE_ACCOUNT_PAGE	(fuk_account_page_get_type())
+G_DECLARE_FINAL_TYPE(FukAccountPage,fuk_account_page,FUK,ACCOUNT_PAGE,FukPage)
 
-struct _FukPageClass
+struct _FukAccountPage
 {
-  GtkBinClass parent_class;
-  gboolean (*closing)(FukPage * page);
+  FukPage parent_instance;
+  FukAccountPagePrivate * priv;
 };
 
+struct _FukAccountPageClass
+{
+  FukPageClass parent_class;
 
-GType		fuk_page_get_type(void);
+};
 
-#endif /* FUKPAGE_H_ */
+GType	fuk_account_page_get_type(void);
+
+#endif /* FUKACCOUNTPAGE_H_ */

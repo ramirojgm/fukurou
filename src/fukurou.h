@@ -22,5 +22,11 @@
 
 #include "common/fukwindow.h"
 #include "common/fukpage.h"
+#include "common/fukpagegroup.h"
+#include "common/fukgridcolumn.h"
+#include "common/fukgridbar.h"
+
+#include "accounting/fukaccountpage.h"
+
 
 #endif /* FUKUROU_H_ */

@@ -33,6 +33,8 @@ int main(int argc,char ** argv)
 static void
 fukurou_app_activate(GtkApplication * app)
 {
+  FUK_TYPE_ACCOUNT_PAGE;
+
   GtkWidget * main_window = fuk_window_new();
   gtk_widget_show(main_window);
   gtk_application_add_window(app,GTK_WINDOW(main_window));

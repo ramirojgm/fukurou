@@ -17,3 +17,32 @@
 
 
 #include "../fukurou.h"
+
+struct _FukPagePrivate
+{
+  guint padding[5];
+};
+
+G_DEFINE_ABSTRACT_TYPE(FukPage,fuk_page,GTK_TYPE_BIN)
+
+static void
+fuk_page_init(FukPage * self)
+{
+  fuk_page_get_instance_private(self);
+}
+
+static void
+fuk_page_class_init(FukPageClass * self)
+{
+
+}
+
+gboolean
+fuk_page_closing(FukPage * page)
+{
+  FukPageClass * klass = FUK_PAGE_GET_CLASS(page);
+  if(klass->closing)
+    return klass->closing(page);
+  else
+    return TRUE;
+}

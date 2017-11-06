@@ -15,21 +15,26 @@
 	along with the this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FUKPAGE_H_
-#define FUKPAGE_H_
+#ifndef FUKGRIDBAR_H_
+#define FUKGRIDBAR_H_
 
-typedef struct _FukPagePrivate FukPagePrivate;
+typedef struct _FukGridBarPrivate FukGridBarPrivate;
 
-#define FUK_TYPE_PAGE	(fuk_page_get_type())
-G_DECLARE_DERIVABLE_TYPE(FukPage,fuk_page,FUK,PAGE,GtkBin)
+#define FUK_TYPE_GRID_BAR	(fuk_grid_bar_get_type())
+G_DECLARE_FINAL_TYPE(FukGridBar,fuk_grid_bar,FUK,GRID_BAR,GtkToolbar)
 
-struct _FukPageClass
+struct _FukGridBarClass
 {
-  GtkBinClass parent_class;
-  gboolean (*closing)(FukPage * page);
+  GtkToolbarClass parent_class;
 };
 
+struct _FukGridBar
+{
+  GtkToolbar parent_instance;
+};
 
-GType		fuk_page_get_type(void);
+GType	fuk_grid_bar_get_type(void);
 
-#endif /* FUKPAGE_H_ */
+
+
+#endif /* FUKGRIDBAR_H_ */
