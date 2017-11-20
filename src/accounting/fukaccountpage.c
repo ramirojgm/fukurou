@@ -44,9 +44,17 @@ static void
 fuk_account_page_init(FukAccountPage * self)
 {
   self->priv = fuk_account_page_get_instance_private(self);
+  self->priv->store = gtk_tree_store_new(4,G_TYPE_INT,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
+
+  self->priv->view = gtk_widget_new(
+      GTK_TYPE_TREE_VIEW,
+      "model",self->priv->store,
+      "visible",TRUE,
+      NULL);
 
   self->priv->toolbar = gtk_widget_new(
-      GTK_TYPE_TOOLBAR,
+      FUK_TYPE_GRID_BAR,
+      "selection", gtk_tree_view_get_selection(GTK_TREE_VIEW(self->priv->view)),
       "visible",TRUE,
       NULL);
 
@@ -59,14 +67,6 @@ fuk_account_page_init(FukAccountPage * self)
   self->priv->scroll = gtk_widget_new(
       GTK_TYPE_SCROLLED_WINDOW,
       "shadow-type",GTK_SHADOW_NONE,
-      "visible",TRUE,
-      NULL);
-
-  self->priv->store = gtk_tree_store_new(4,G_TYPE_INT,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
-
-  self->priv->view = gtk_widget_new(
-      GTK_TYPE_TREE_VIEW,
-      "model",self->priv->store,
       "visible",TRUE,
       NULL);
 
@@ -98,18 +98,18 @@ fuk_account_page_init(FukAccountPage * self)
       "clickable",TRUE,
       NULL));
 
-  gtk_box_pack_start(
-      GTK_BOX(self->priv->content),
-      self->priv->toolbar,
-      FALSE,
-      FALSE,
-      0);
-
   gtk_box_pack_end(
       GTK_BOX(self->priv->content),
       self->priv->scroll,
       TRUE,
       TRUE,
+      0);
+
+  gtk_box_pack_start(
+      GTK_BOX(self->priv->content),
+      self->priv->toolbar,
+      FALSE,
+      FALSE,
       0);
 
   gtk_tree_view_append_column(
@@ -133,6 +133,17 @@ fuk_account_page_init(FukAccountPage * self)
   gtk_container_add(
       GTK_CONTAINER(self),
       self->priv->content);
+
+  GtkTreeIter iter;
+  GtkTreeIter child;
+  gtk_tree_store_append(self->priv->store,&iter,NULL);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
+  gtk_tree_store_append(self->priv->store,&iter,NULL);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
+  gtk_tree_store_append(self->priv->store,&child,&iter);
 }
 
 static void

@@ -20,6 +20,11 @@
 
 #include <gtk/gtk.h>
 
+#define GETTEXT_PACKAGE "fukurou"
+
+#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
+
 #include "common/fukwindow.h"
 #include "common/fukpage.h"
 #include "common/fukpagegroup.h"

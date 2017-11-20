@@ -21,22 +21,21 @@
 typedef struct _FukGridBarPrivate FukGridBarPrivate;
 
 #define FUK_TYPE_GRID_BAR	(fuk_grid_bar_get_type())
-G_DECLARE_FINAL_TYPE(FukGridBar,fuk_grid_bar,FUK,GRID_BAR,GtkToolbar)
+G_DECLARE_FINAL_TYPE(FukGridBar,fuk_grid_bar,FUK,GRID_BAR,GtkViewport)
 
 struct _FukGridBarClass
 {
-  GtkToolbarClass parent_class;
+  GtkViewportClass parent_class;
 };
 
 struct _FukGridBar
 {
-  GtkToolbar parent_instance;
+  GtkViewport parent_instance;
 
   FukGridBarPrivate * priv;
 };
 
 GType	fuk_grid_bar_get_type(void);
-
 
 
 #endif /* FUKGRIDBAR_H_ */

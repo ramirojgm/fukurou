@@ -29,6 +29,13 @@ static void
 fuk_page_init(FukPage * self)
 {
   fuk_page_get_instance_private(self);
+  gtk_style_context_add_class(
+       gtk_widget_get_style_context(GTK_WIDGET(self)),
+       GTK_STYLE_CLASS_BACKGROUND);
+
+  gtk_style_context_add_class(
+       gtk_widget_get_style_context(GTK_WIDGET(self)),
+       GTK_STYLE_CLASS_VIEW);
 }
 
 static void
