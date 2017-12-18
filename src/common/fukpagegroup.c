@@ -341,9 +341,9 @@ fuk_page_group_init(FukPageGroup * self)
       G_CALLBACK(fuk_page_group_row_activated)
       ,self);
 
-  gtk_style_context_add_class(
+  /*gtk_style_context_add_class(
       gtk_widget_get_style_context(self->priv->menu),
-      GTK_STYLE_CLASS_BACKGROUND);
+      GTK_STYLE_CLASS_BACKGROUND);*/
 }
 
 static void
@@ -437,37 +437,37 @@ fuk_page_option_set_property(GObject      *object,
   switch(property_id)
     {
       case FUK_PROP_O_ICON_NAME:
-      g_clear_pointer(&(self->priv->icon_name),g_free);
-      self->priv->icon_name = g_value_dup_string(value);
-      gtk_image_set_from_icon_name(
-	  GTK_IMAGE(self->priv->header_icon),
-	  self->priv->icon_name,
-	  GTK_ICON_SIZE_MENU);
-      break;
+	g_clear_pointer(&(self->priv->icon_name),g_free);
+	self->priv->icon_name = g_value_dup_string(value);
+	gtk_image_set_from_icon_name(
+	    GTK_IMAGE(self->priv->header_icon),
+	    self->priv->icon_name,
+	    GTK_ICON_SIZE_MENU);
+	break;
       case FUK_PROP_O_TITLE:
-      g_clear_pointer(&(self->priv->title),g_free);
-      self->priv->title = g_value_dup_string(value);
-      new_description = g_strdup_printf(
+	g_clear_pointer(&(self->priv->title),g_free);
+	self->priv->title = g_value_dup_string(value);
+	new_description = g_strdup_printf(
 	  "<b>%s</b>\n<small>%s</small>",
 	  self->priv->title,
 	  self->priv->description);
-      gtk_label_set_markup(
-	  GTK_LABEL(self->priv->header_description),
-	  new_description);
-      g_free(new_description);
-	      break;
+	gtk_label_set_markup(
+	    GTK_LABEL(self->priv->header_description),
+	    new_description);
+	g_free(new_description);
+	break;
       case FUK_PROP_O_DESCRIPTION:
-      g_clear_pointer(&(self->priv->description),g_free);
-      self->priv->description = g_value_dup_string(value);
-      new_description = g_strdup_printf(
+	g_clear_pointer(&(self->priv->description),g_free);
+	self->priv->description = g_value_dup_string(value);
+	new_description = g_strdup_printf(
 	  "<b>%s</b>\n<small>%s</small>",
 	  self->priv->title,
 	  self->priv->description);
-      gtk_label_set_markup(
-	  GTK_LABEL(self->priv->header_description),
-	  new_description);
-      g_free(new_description);
-	      break;
+	gtk_label_set_markup(
+	    GTK_LABEL(self->priv->header_description),
+	    new_description);
+	g_free(new_description);
+	break;
       case FUK_PROP_O_PAGE_TYPE:
 	self->priv->page_type = g_value_get_gtype(value);
 	break;

@@ -33,12 +33,17 @@ struct _FukAccountPagePrivate
 		    * col_description;
 
   GtkCellRenderer * cell_code,
+		  * cell_icon,
 		  * cell_name,
 		  * cell_description;
 
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(FukAccountPage,fuk_account_page,FUK_TYPE_PAGE)
+
+static void
+fuk_account_page_toolbar_add_row(FukAccountPage * self,GtkTreeIter * iter);
+
 
 static void
 fuk_account_page_init(FukAccountPage * self)
@@ -70,6 +75,7 @@ fuk_account_page_init(FukAccountPage * self)
       "visible",TRUE,
       NULL);
 
+  self->priv->cell_icon = gtk_cell_renderer_pixbuf_new();
   self->priv->cell_code = gtk_cell_renderer_text_new();
   self->priv->cell_name = gtk_cell_renderer_text_new();
   self->priv->cell_description = gtk_cell_renderer_text_new();
@@ -124,7 +130,21 @@ fuk_account_page_init(FukAccountPage * self)
        GTK_TREE_VIEW(self->priv->view),
        self->priv->col_description);
 
+  gtk_tree_view_column_pack_start(
+      self->priv->col_code,
+      self->priv->cell_icon,
+      FALSE);
 
+  gtk_tree_view_column_pack_start(
+      self->priv->col_code,
+      self->priv->cell_code,
+      FALSE);
+
+  g_object_set(
+      G_OBJECT(self->priv->cell_icon),
+      "icon-name",
+      "folder",
+      NULL);
 
   gtk_container_add(
         GTK_CONTAINER(self->priv->scroll),
@@ -133,6 +153,11 @@ fuk_account_page_init(FukAccountPage * self)
   gtk_container_add(
       GTK_CONTAINER(self),
       self->priv->content);
+
+  g_signal_connect_swapped(self->priv->toolbar,
+			   "add-row",
+			   G_CALLBACK(fuk_account_page_toolbar_add_row),
+			   self);
 
   GtkTreeIter iter;
   GtkTreeIter child;
@@ -150,4 +175,20 @@ static void
 fuk_account_page_class_init(FukAccountPageClass * klass)
 {
 
+}
+
+static void
+fuk_account_page_toolbar_add_row(FukAccountPage * self,GtkTreeIter * iter)
+{
+  GtkTreeIter child;
+  gtk_tree_store_append(self->priv->store,&child,iter);
+  FukInputPopover * popover = fuk_input_popover_new();
+  if(fuk_input_popover_run(popover,self->priv->view,&child))
+    {
+     ;
+    }
+  else
+    {
+      gtk_tree_store_remove(self->priv->store,&child);
+    }
 }

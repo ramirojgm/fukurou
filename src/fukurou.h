@@ -30,6 +30,7 @@
 #include "common/fukpagegroup.h"
 #include "common/fukgridcolumn.h"
 #include "common/fukgridbar.h"
+#include "common/fukinputpopover.h"
 
 #include "accounting/fukaccountpage.h"
 

@@ -73,6 +73,9 @@ _fuk_grid_bar_on_tb_edit_clicked(FukGridBar * bar);
 static void
 _fuk_grid_bar_on_tb_update_clicked(FukGridBar * bar);
 
+static void
+_fuk_grid_bar_on_tb_position_button_clicked(FukGridBar * bar,
+					    GtkWidget * button);
 
 static void
 fuk_grid_bar_init(FukGridBar * self)
@@ -250,6 +253,30 @@ fuk_grid_bar_init(FukGridBar * self)
       G_OBJECT(self->priv->tb_update),
       "clicked",
       G_CALLBACK(_fuk_grid_bar_on_tb_update_clicked),
+      self);
+
+  g_signal_connect_swapped(
+      G_OBJECT(self->priv->tb_first),
+      "clicked",
+      G_CALLBACK(_fuk_grid_bar_on_tb_position_button_clicked),
+      self);
+
+  g_signal_connect_swapped(
+      G_OBJECT(self->priv->tb_previous),
+      "clicked",
+      G_CALLBACK(_fuk_grid_bar_on_tb_position_button_clicked),
+      self);
+
+  g_signal_connect_swapped(
+      G_OBJECT(self->priv->tb_next),
+      "clicked",
+      G_CALLBACK(_fuk_grid_bar_on_tb_position_button_clicked),
+      self);
+
+  g_signal_connect_swapped(
+      G_OBJECT(self->priv->tb_last),
+      "clicked",
+      G_CALLBACK(_fuk_grid_bar_on_tb_position_button_clicked),
       self);
 
   gtk_style_context_add_class(
@@ -434,7 +461,6 @@ fuk_grid_bar_update_button(FukGridBar * self)
 static void
 fuk_grid_bar_selection_changed(FukGridBar * self,GtkTreeSelection * selection)
 {
-  g_print("changed");
   fuk_grid_bar_update_button(FUK_GRID_BAR(self));
 }
 
@@ -649,4 +675,62 @@ _fuk_grid_bar_on_tb_update_clicked(FukGridBar * self)
 	0,
 	NULL);
     }
+}
+
+static void
+_fuk_grid_bar_on_tb_position_button_clicked(FukGridBar * self,GtkWidget * button)
+{
+  GtkTreeIter iter;
+  GtkTreeModel * model = gtk_tree_view_get_model(
+	gtk_tree_selection_get_tree_view(
+	    self->priv->ts_selection));
+
+  if(model)
+  {
+    if(gtk_tree_selection_get_selected(
+	    self->priv->ts_selection,
+	    NULL,
+	    &iter))
+      {
+	GtkTreePath * path = gtk_tree_model_get_path(
+	    model,
+	    &iter);
+
+	GtkTreeIter select = iter;
+
+	gint depth = gtk_tree_path_get_depth(path);
+
+	GtkTreeIter * parent_iter = NULL;
+	if(gtk_tree_path_up(path) && depth > 1)
+	  {
+	    gtk_tree_model_get_iter(model,&iter,path);
+	    parent_iter = &iter;
+	  }
+	gtk_tree_path_free(path);
+
+	guint count = gtk_tree_model_iter_n_children(
+	    model,
+	    parent_iter);
+
+	if(button == self->priv->tb_first)
+	  {
+	    gtk_tree_model_iter_children(model,&select,parent_iter);
+	  }
+	else if(button == self->priv->tb_previous)
+	  {
+	    gtk_tree_model_iter_previous(model,&select);
+	  }
+	else if(button == self->priv->tb_next)
+	  {
+	    gtk_tree_model_iter_next(model,&select);
+	  }
+	else if(button == self->priv->tb_last)
+	  {
+	    gtk_tree_model_iter_nth_child(model,&select,parent_iter,count - 1);
+	  }
+
+	gtk_tree_selection_select_iter(self->priv->ts_selection,
+				       &select);
+      }
+  }
 }

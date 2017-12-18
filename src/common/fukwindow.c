@@ -22,8 +22,9 @@ struct _FukWindowPrivate
 {
   /* ui */
   GtkWidget * header_bar;
-  GtkWidget * menu_button;
-  GtkWidget * menu_popover;
+  //GtkWidget * menu_button;
+  //GtkWidget * menu_popover;
+  GtkWidget * paned;
   GtkWidget * menu_viewport;
   GtkWidget * menu_box;
   GtkWidget * body;
@@ -293,7 +294,6 @@ fuk_window_page_option_clicked(FukWindow * win,
       gtk_widget_get_toplevel(
 	  page_notebook)));
 
-  gtk_widget_hide(win->priv->menu_popover);
 }
 
 static void
@@ -308,6 +308,12 @@ fuk_window_init(FukWindow * self)
       "visible",TRUE,
       NULL);
 
+  self->priv->paned = gtk_widget_new(
+     GTK_TYPE_PANED,
+     "orientation", GTK_ORIENTATION_HORIZONTAL,
+     "visible",TRUE,
+     NULL);
+
   self->priv->body = gtk_widget_new(
       GTK_TYPE_NOTEBOOK,
       "group-name","main-page",
@@ -316,24 +322,10 @@ fuk_window_init(FukWindow * self)
       "visible",TRUE,
       NULL);
 
-  self->priv->menu_popover = gtk_widget_new(
-       GTK_TYPE_POPOVER,
-       "visible", FALSE,
-       "border-width",0,
-       "height-request",400,
-       "width-request",300,
-       NULL);
-
   self->priv->menu_viewport = gtk_widget_new(
       GTK_TYPE_VIEWPORT,
+      "shadow-type",GTK_SHADOW_NONE,
       "visible", TRUE,
-      NULL);
-
-  self->priv->menu_button = gtk_widget_new(
-      GTK_TYPE_MENU_BUTTON,
-      "visible", TRUE,
-      "popover", self->priv->menu_popover,
-      "image", gtk_image_new_from_icon_name("open-menu-symbolic",GTK_ICON_SIZE_BUTTON),
       NULL);
 
   self->priv->menu_box = gtk_widget_new(
@@ -350,21 +342,25 @@ fuk_window_init(FukWindow * self)
 
   gtk_window_set_default_size(GTK_WINDOW(self),800,600);
 
-  gtk_header_bar_pack_start(
-      GTK_HEADER_BAR(self->priv->header_bar),
-      self->priv->menu_button);
-
   gtk_window_set_titlebar(
       GTK_WINDOW(self),
       self->priv->header_bar);
 
   gtk_container_add(
       GTK_CONTAINER(self),
-      self->priv->body);
+      self->priv->paned);
 
-  gtk_container_add(
-      GTK_CONTAINER(self->priv->menu_popover),
-      self->priv->menu_viewport);
+  gtk_paned_pack1(
+      GTK_PANED(self->priv->paned),
+      self->priv->menu_viewport,
+      FALSE,
+      FALSE);
+
+  gtk_paned_pack2(
+      GTK_PANED(self->priv->paned),
+      self->priv->body,
+      TRUE,
+      TRUE);
 
   gtk_container_add(
       GTK_CONTAINER(self->priv->menu_viewport),
@@ -376,6 +372,10 @@ fuk_window_init(FukWindow * self)
       "create-window",
       G_CALLBACK(fuk_window_body_create_window),
       self);
+
+  gtk_style_context_add_class(
+      gtk_widget_get_style_context(self->priv->menu_viewport),
+      GTK_STYLE_CLASS_SIDEBAR);
 
   fuk_window_menu_init(self);
 
